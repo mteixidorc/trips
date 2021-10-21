@@ -16,3 +16,8 @@ func NewHTTPErrorJSON(code int, message string) string {
 type HTTPOk struct {
 	Message string `json:"message"`
 }
+
+type HTTPPostCreationOk struct {
+	Message string `json:"message"`
+	Id      string `json:"id"`
+}

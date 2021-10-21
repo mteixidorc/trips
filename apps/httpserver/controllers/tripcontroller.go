@@ -70,7 +70,7 @@ func (s *TripHTTPController) postTripHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	err = s.useCases.CreateTrip(
+	id, err := s.useCases.CreateTrip(
 		&trip.TripDTO{
 			OriginId:      tripRequestBody.OriginId,
 			DestinationId: tripRequestBody.DestinationId,
@@ -84,6 +84,6 @@ func (s *TripHTTPController) postTripHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	json.NewEncoder(w).Encode(HTTPOk{"trip record saved"})
+	json.NewEncoder(w).Encode(HTTPPostCreationOk{Id: id, Message: "trip record saved"})
 
 }
