@@ -22,6 +22,6 @@ func NewTripDTOFromAggregate(trip *domain.Trip) *TripDTO {
 		OriginId:      trip.OriginId().Value().(int64),
 		DestinationId: trip.DestinationId().Value().(int64),
 		Dates:         trip.Dates().String(),
-		Price:         trip.Price(),
+		Price:         trip.Price().Value().(float64),
 	}
 }

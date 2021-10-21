@@ -18,21 +18,21 @@ type UseCases interface {
 
 // TripsService
 // An implementation of UseCases interface, out domain service of tips bounded context
-type TripsService struct {
+type tripsService struct {
 	tripquery   tripapp.TripQuery
 	tripupdater tripapp.TripUpdater
 	cityquery   cityapp.CityQuery
 }
 
-func NewTripService(tripRepository domain.TripRepository, cityRepository domain.CityRepository) TripsService {
-	return TripsService{
+func NewTripService(tripRepository domain.TripRepository, cityRepository domain.CityRepository) tripsService {
+	return tripsService{
 		tripquery:   tripapp.NewTripQuery(tripRepository),
 		tripupdater: tripapp.NewTripUpdater(tripRepository),
 		cityquery:   cityapp.NewCityQuery(cityRepository),
 	}
 }
 
-func (service TripsService) CreateTrip(trip *tripapp.TripDTO) (string, error) {
+func (service tripsService) CreateTrip(trip *tripapp.TripDTO) (string, error) {
 	// Verify if origin and destination cities exist
 	_, err := service.cityquery.Get(trip.OriginId)
 	if err != nil {
@@ -47,7 +47,7 @@ func (service TripsService) CreateTrip(trip *tripapp.TripDTO) (string, error) {
 	return service.tripupdater.New(trip)
 }
 
-func (service TripsService) GetTripById(id string) (*tripapp.TripDTO, error) {
+func (service tripsService) GetTripById(id string) (*tripapp.TripDTO, error) {
 	trip, err := service.tripquery.Get(id)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (service TripsService) GetTripById(id string) (*tripapp.TripDTO, error) {
 	return tripResult, nil
 }
 
-func (service TripsService) GetAllTrips() ([]*tripapp.TripDTO, error) {
+func (service tripsService) GetAllTrips() ([]*tripapp.TripDTO, error) {
 	trips, err := service.tripquery.GetAll()
 	if err != nil {
 		return nil, err
@@ -78,7 +78,7 @@ func (service TripsService) GetAllTrips() ([]*tripapp.TripDTO, error) {
 	return result, nil
 }
 
-func (service TripsService) getTripCities(trip *tripapp.TripDTO) error {
+func (service tripsService) getTripCities(trip *tripapp.TripDTO) error {
 	originCity, err := service.cityquery.Get(trip.OriginId)
 	if err != nil {
 		return fmt.Errorf("origin city id %d not exists", trip.OriginId)

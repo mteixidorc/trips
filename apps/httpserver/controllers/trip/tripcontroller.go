@@ -1,4 +1,4 @@
-package controllers
+package trip
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/mteixidorc/trips/apps/httpserver/controllers/shared"
 	"github.com/mteixidorc/trips/internal/trips/application"
 	"github.com/mteixidorc/trips/internal/trips/application/trip"
 	"github.com/mteixidorc/trips/internal/trips/infrastructure/repository"
@@ -35,36 +36,36 @@ func NewTripHTTPController(useCases application.UseCases) TripHTTPController {
 }
 
 func (controller TripHTTPController) AddHTTPHandlers(router *mux.Router) {
-	router.HandleFunc("/trip", controller.getAllTripsHandler).Methods(http.MethodGet)
-	router.HandleFunc("/trip/{id}", controller.getTripByIdHandler).Methods(http.MethodGet)
-	router.HandleFunc("/trip", controller.postTripHandler).Methods(http.MethodPost)
+	router.HandleFunc("/trip", controller.GetAllTripsHandler).Methods(http.MethodGet)
+	router.HandleFunc("/trip/{id}", controller.GetTripByIdHandler).Methods(http.MethodGet)
+	router.HandleFunc("/trip", controller.PostTripHandler).Methods(http.MethodPost)
 }
 
-func (c *TripHTTPController) getAllTripsHandler(w http.ResponseWriter, r *http.Request) {
+func (c *TripHTTPController) GetAllTripsHandler(w http.ResponseWriter, r *http.Request) {
 	trips, err := c.useCases.GetAllTrips()
 	if err != nil {
-		http.Error(w, NewHTTPErrorJSON(0, err.Error()), http.StatusInternalServerError)
+		http.Error(w, shared.NewHTTPErrorJSON(0, err.Error()), http.StatusBadRequest)
 		return
 	}
 
 	json.NewEncoder(w).Encode(TripsToTripResponses(trips...))
 }
 
-func (s *TripHTTPController) getTripByIdHandler(w http.ResponseWriter, r *http.Request) {
+func (s *TripHTTPController) GetTripByIdHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 
 	trip, err := s.useCases.GetTripById(id)
 	if err != nil {
-		http.Error(w, NewHTTPErrorJSON(0, err.Error()), http.StatusInternalServerError)
+		http.Error(w, shared.NewHTTPErrorJSON(0, err.Error()), http.StatusBadRequest)
 		return
 	}
 
 	json.NewEncoder(w).Encode(TripsToTripResponses(trip))
 }
 
-func (s *TripHTTPController) postTripHandler(w http.ResponseWriter, r *http.Request) {
+func (s *TripHTTPController) PostTripHandler(w http.ResponseWriter, r *http.Request) {
 	tripRequestBody := TripRequest{}
-	err := json.NewDecoder(r.Body).Decode(&tripRequestBody)
+	err := json.NewDecoder(r.Body).Decode(&tripRequestBody) 
 	if err != nil {
 		http.Error(w, fmt.Sprintf("JSON format error: %s", err.Error()), http.StatusBadRequest)
 		return
@@ -80,10 +81,10 @@ func (s *TripHTTPController) postTripHandler(w http.ResponseWriter, r *http.Requ
 	)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	json.NewEncoder(w).Encode(HTTPPostCreationOk{Id: id, Message: "trip record saved"})
+	json.NewEncoder(w).Encode(shared.HTTPPostCreationOk{Id: id, Message: "trip record saved"})
 
 }

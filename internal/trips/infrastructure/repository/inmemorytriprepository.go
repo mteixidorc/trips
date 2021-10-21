@@ -20,19 +20,19 @@ func NewInMemoryTripRepository() InMemoryTripRepository {
 				value.NewValueObjectID(1),
 				value.NewValueObjectID(2),
 				domain.NewValueObjectTripDatesMust("Mon Tue Wed Fri"),
-				40.55),
+				domain.NewValueObjectPriceMust(50.55)),
 			"c7b33bfe-3584-4a02-96f1-d1a831f83252": domain.NewTrip(
 				value.NewValueObjectUniqueIDFromStringMust("c7b33bfe-3584-4a02-96f1-d1a831f83252"),
 				value.NewValueObjectID(2),
 				value.NewValueObjectID(1),
 				domain.NewValueObjectTripDatesMust("Sat Sun"),
-				40.55),
+				domain.NewValueObjectPriceMust(150.55)),
 			"42bf5c67-8f42-4c55-8e0c-7c5020cfad58": domain.NewTrip(
 				value.NewValueObjectUniqueIDFromStringMust("42bf5c67-8f42-4c55-8e0c-7c5020cfad58"),
 				value.NewValueObjectID(3),
 				value.NewValueObjectID(6),
 				domain.NewValueObjectTripDatesMust("Mon Tue Wed Thu Fri"),
-				32.10),
+				domain.NewValueObjectPriceMust(5.01)),
 		},
 	}
 }

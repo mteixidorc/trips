@@ -9,16 +9,21 @@ type Trip struct {
 	originId      value.ValueObjectID
 	destinationId value.ValueObjectID
 	dates         ValueObjectTripDates
-	price         float64
+	price         ValueObjectPrice
 }
 
-func NewTrip(id value.ValueObjectUniqueID, originId value.ValueObjectID, destinationId value.ValueObjectID, dates *ValueObjectTripDates, price float64) *Trip {
+func NewTrip(
+	id value.ValueObjectUniqueID,
+	originId value.ValueObjectID,
+	destinationId value.ValueObjectID,
+	dates *ValueObjectTripDates,
+	price *ValueObjectPrice) *Trip {
 	return &Trip{
 		id:            id,
 		originId:      originId,
 		destinationId: destinationId,
 		dates:         *dates,
-		price:         price,
+		price:         *price,
 	}
 }
 
@@ -38,6 +43,6 @@ func (trip Trip) Dates() ValueObjectTripDates {
 	return trip.dates
 }
 
-func (trip Trip) Price() float64 {
+func (trip Trip) Price() ValueObjectPrice {
 	return trip.price
 }

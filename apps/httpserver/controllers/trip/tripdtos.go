@@ -1,4 +1,4 @@
-package controllers
+package trip
 
 import "github.com/mteixidorc/trips/internal/trips/application/trip"
 

@@ -2,6 +2,7 @@
 
 An example of a simple API, just a way to make a practice applying DDD and coding with Golang.
 The intention is to encapsulate the application logic into the center (domain) and use interfaces where it is possible in the future to replace the implementation, such as persistence.
+
 The way we obtain information from our domain (http rest services, console commands, and so on) should be independent from domain logic itself. 
 
 ## Clone the project
@@ -46,6 +47,21 @@ Alternatively you could execute project directly without a previous compilation
 go run main.go 
 ```
 
+One way to test endpoints is with curl:
+
+POST Trip Creation 
+```
+curl -X POST http://localhost:8080/trip -H 'Content-Type: application/json' -d '{ "originId": 2, "destinationId": 1, "dates": "Sat Sun", "price": 40.55}'
+```
+GET All Trips
+```
+curl -X GET http://localhost:8080/trip 
+```
+
+GET a trip by ID 
+```
+curl http://localhost:8080/trip/6de052bc-94f9-4bfc-8fa5-0962ff9b4b99
+```
 ### Tests
 
 Run all tests just with this:
@@ -54,9 +70,10 @@ Run all tests just with this:
 go test ./...
 ```
 
-Currently I only have the main tests done, just to verify that some ValueObjects and my UseCases are working.
-In the future I'll make other unit test and some integration tests as well.
-
+Tests are made at distinct levels:
+- domain: Value Objects
+- application: Use cases, queries, updaters.
+- apps: http server handlers
 
 ### Architecture ###
 
@@ -74,10 +91,10 @@ The trips will be obtained in the following format:
 
 ```json
 {
-    origin: "Barcelona",
-    destination: "Seville",
-    dates: "Mon Tue Wed Fri",
-    price: 40.55
+    "origin": "Barcelona",
+    "destination": "Seville",
+    "dates": "Mon Tue Wed Fri",
+    "price": 40.55
 }
 ```
 
@@ -85,10 +102,10 @@ Whereas to add a trip, we would send the following:
 
 ```json
 {
-    originId: 2,
-    destinationId: 1,
-    dates: "Sat Sun",
-    price: 40.55
+    "originId": 2,
+    "destinationId": 1,
+    "dates": "Sat Sun",
+    "price": 40.55
 }
 ```
 
@@ -97,4 +114,5 @@ The list of cities is in a text file in folder `data` and is automatically loade
 
 ### TODO
 
-- Tests, more tests.
+- Connect infrastructure to a real services.
+- Make a API versioning system 

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"path"
 
@@ -26,8 +27,7 @@ func NewFileCityRepository() (*FileCityRepository, error) {
 	f, err := os.Open(fileCitiesPath)
 
 	if err != nil {
-		// TODO build a better error message
-		return nil, err
+		return nil, fmt.Errorf("error opening file %s -> %s", fileCitiesPath, err)
 	}
 
 	defer f.Close()

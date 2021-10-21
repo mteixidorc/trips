@@ -25,12 +25,18 @@ func (updater TripUpdater) New(trip *TripDTO) (string, error) {
 		return "", err
 	}
 
+	price, err := domain.NewValueObjectPrice(trip.Price)
+
+	if err != nil {
+		return "", err
+	}
+
 	return updater.repository.Create(
 		domain.NewTrip(
 			value.NewValueObjectUniqueID(),
 			value.NewValueObjectID(trip.OriginId),
 			value.NewValueObjectID(trip.DestinationId),
 			dates,
-			trip.Price),
+			price),
 	)
 }
