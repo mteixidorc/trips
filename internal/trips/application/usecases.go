@@ -11,7 +11,7 @@ import (
 // UseCases
 // Interface for usecases implemented into trips bounded context
 type UseCases interface {
-	CreateTrip(*tripapp.TripDTO) error
+	CreateTrip(*tripapp.TripDTO) (string, error)
 	GetTripById(id string) (*tripapp.TripDTO, error)
 	GetAllTrips() ([]*tripapp.TripDTO, error)
 }
@@ -32,16 +32,16 @@ func NewTripService(tripRepository domain.TripRepository, cityRepository domain.
 	}
 }
 
-func (service TripsService) CreateTrip(trip *tripapp.TripDTO) error {
+func (service TripsService) CreateTrip(trip *tripapp.TripDTO) (string, error) {
 	// Verify if origin and destination cities exist
 	_, err := service.cityquery.Get(trip.OriginId)
 	if err != nil {
-		return fmt.Errorf("origin city %d not exists", trip.OriginId)
+		return "", fmt.Errorf("origin city %d not exists", trip.OriginId)
 	}
 
 	_, err = service.cityquery.Get(trip.DestinationId)
 	if err != nil {
-		return fmt.Errorf("destination city %d not exists", trip.DestinationId)
+		return "", fmt.Errorf("destination city %d not exists", trip.DestinationId)
 	}
 
 	return service.tripupdater.New(trip)

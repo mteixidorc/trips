@@ -5,7 +5,6 @@ import (
 	"github.com/mteixidorc/trips/internal/trips/domain"
 )
 
-
 // TripUpdater
 // Encapsulates all operations that modifies info (CQS)
 type TripUpdater struct {
@@ -18,12 +17,12 @@ func NewTripUpdater(repository domain.TripRepository) TripUpdater {
 	}
 }
 
-func (updater TripUpdater) New(trip *TripDTO) error {
+func (updater TripUpdater) New(trip *TripDTO) (string, error) {
 	// Verify dates
 	dates, err := domain.NewValueObjectTripDates(trip.Dates)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	return updater.repository.Create(

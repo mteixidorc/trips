@@ -1,6 +1,8 @@
 # Trips
 
 An example of a simple API, just a way to make a practice applying DDD and coding with Golang.
+The intention is to encapsulate the application logic into the center (domain) and use interfaces where it is possible in the future to replace the implementation, such as persistence.
+The way we obtain information from our domain (http rest services, console commands, and so on) should be independent from domain logic itself. 
 
 ## Clone the project
 

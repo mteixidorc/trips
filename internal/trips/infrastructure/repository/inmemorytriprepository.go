@@ -54,7 +54,7 @@ func (repository InMemoryTripRepository) GetAll() ([]*domain.Trip, error) {
 	return result, nil
 }
 
-func (repository InMemoryTripRepository) Create(trip *domain.Trip) error {
+func (repository InMemoryTripRepository) Create(trip *domain.Trip) (string, error) {
 	repository.trips[trip.Id().String()] = trip
-	return nil
+	return trip.Id().String(), nil
 }

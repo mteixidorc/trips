@@ -76,19 +76,16 @@ func (repository MockTripRepository) GetAll() ([]*domain.Trip, error) {
 	return result, nil
 }
 
-func (repository MockTripRepository) Create(trip *domain.Trip) error {
+func (repository MockTripRepository) Create(trip *domain.Trip) (string, error) {
 	id := value.NewValueObjectUniqueID()
 	repository.data[id] = trip
-	return nil
+	return id.String(), nil
 }
 
 func TestCreateTripOriginCityNotExistsMustFail(t *testing.T) {
-	cityRepo := NewMockCityRepository()
-	tripRepo := NewMockTripRepository()
+	useCases := buildUseCases()
 
-	usecases := application.NewTripService(tripRepo, cityRepo)
-
-	err := usecases.CreateTrip(&trip.TripDTO{
+	_, err := useCases.CreateTrip(&trip.TripDTO{
 		OriginId:      34,
 		DestinationId: 1,
 		Dates:         "Thu",
@@ -98,4 +95,50 @@ func TestCreateTripOriginCityNotExistsMustFail(t *testing.T) {
 	if err == nil {
 		t.Fail()
 	}
+}
+
+func TestCreateTripMustWork(t *testing.T) {
+	useCases := buildUseCases()
+
+	_, err := useCases.CreateTrip(&trip.TripDTO{
+		OriginId:      2,
+		DestinationId: 1,
+		Dates:         "Thu",
+		Price:         345.34,
+	})
+
+	if err != nil {
+		t.Fail()
+	}
+}
+
+func TestGetNonExistIDTripMustFail(t *testing.T) {
+	useCases := buildUseCases()
+
+	_, err := useCases.GetTripById(value.NewValueObjectUniqueID().String())
+
+	if err == nil {
+		t.Fail()
+	}
+}
+
+func TestGetTripsMustWork(t *testing.T) {
+	useCases := buildUseCases()
+
+	trips, err := useCases.GetAllTrips()
+	if err != nil {
+		t.FailNow()
+	}
+
+	if len(trips) == 0 {
+		t.Fail()
+	}
+}
+
+// DRY
+func buildUseCases() application.UseCases {
+	cityRepo := NewMockCityRepository()
+	tripRepo := NewMockTripRepository()
+
+	return application.NewTripService(tripRepo, cityRepo)
 }
