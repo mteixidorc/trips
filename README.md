@@ -1,7 +1,7 @@
 # Trips
 
 An example of a simple API, just a way to make a practice applying DDD and coding with Golang.
-The intention is to encapsulate the application logic into the center (domain) and use interfaces where it is possible in the future to replace the implementation, such as persistence.
+The intention is to encapsulate and push the application logic to the center (domain) and use interfaces where it is possible in order to replace current data access and other input / output operative.
 The way we obtain information from our domain (http rest services, console commands, and so on) should be independent from domain logic itself. 
 
 ## Clone the project
@@ -18,15 +18,6 @@ You will need GO compiler to build and/or execute the application
 
 
 ## Build / Execute 
-
-At the moment I've just implemented the Rest Service for this requests:
-
-| Method | Endpoint  | Description          |
-|--------|-----------|----------------------|
-| GET    | /trip     | List all trips       |
-| POST   | /trip     | Add a new trip       |
-| GET    | /trip/:id | Get trip with ID :id |
-
 
 In order to start service, go to /apps/httpserver folder and execute:
 ```
@@ -69,6 +60,14 @@ Files are organized using this structure:
 - internal: Here we will put all code related to our domain (domain, application and infrastructure).
 
 ### REST API Description
+
+At the moment I've just implemented the Rest Service for this requests:
+
+| Method | Endpoint  | Description          |
+|--------|-----------|----------------------|
+| GET    | /trip     | List all trips       |
+| POST   | /trip     | Add a new trip       |
+| GET    | /trip/:id | Get trip with ID :id |
 
 The trips will be obtained in the following format:
 
